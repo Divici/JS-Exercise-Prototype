@@ -39,14 +39,37 @@ Airplane.prototype.land = function () {
         + It should return a string with `name` and `age`. Example: "Mary, 50"
 */
 
-function Person() {
-  
+function Person(name, age) {
+  this.name = name;
+  this.age = age;
+  this.stomach = [];
 }
 
+Person.prototype.eat = function(someFood){
+  if(this.stomach.length < 10){
+    this.stomach.push(someFood);
+  }
+};
 
+Person.prototype.poop = function(){
+  this.stomach.splice(0);
+};
 
+Person.prototype.toString = function(){
+  return `${this.name}, ${this.age}`;
+};
 
+const kyler= new Person('Kylar', 25);
 
+console.log(kyler.toString());
+kyler.eat('pizza');
+kyler.eat('burgers');
+kyler.eat('rice and chicken');
+kyler.eat('steak');
+kyler.eat('mac n cheese');
+console.log(kyler.stomach);
+kyler.poop();
+console.log(kyler.stomach);
 
 
 /*
@@ -63,10 +86,20 @@ function Person() {
         + The `drive` method should return a string "I ran out of fuel at x miles!" x being `odometer`.
 */
 
-function Car() {
-  
+function Car(model, milesPerGallon) {
+  this.model = model;
+  this.milesPerGallon = milesPerGallon;
+  this.tank = 0;
+  this.odometer = 0;
 }
 
+Car.prototype.fill = function(gallons){
+  this.tank += gallons;
+}
+Car.prototype.drive = function(distance){
+  this.odometer += distance;
+  this.tank -= (distance / this.milesPerGallon);
+}
 
 /*
   TASK 3
@@ -75,20 +108,29 @@ function Car() {
     - Besides the methods on Person.prototype, babies have the ability to `.play()`:
         + Should return a string "Playing with x", x being the favorite toy.
 */
-function Baby() {
- 
+function Baby(name, age, favoriteToy) {
+ Person.call(this, name, age);
+ this.favoriteToy = favoriteToy;
 }
 
+Baby.prototype = Object.create(Person.prototype);
+Baby.prototype.play = function(){
+  return `Playing with ${this.favoriteToy}`;
+}
 
 /* 
   TASK 4
   In your own words explain the four principles for the "this" keyword below:
-  1. 
-  2. 
-  3. 
-  4. 
+  1. In window binding the value of 'this' is the window/console object.
+  2. Implicit is looking to the left of the invocation. eg array.splice()
+  3. With explicit binding we override the constructor and tell it what 'this should be by using .call, .apply or .bind.
+  4. With new binding a new object is constructed and the 'this' binding is set to it.
 */
 
+// Window binding -if we haven't given 'this' any context it will return the window, the global object in node or undefined in strict mode.
+// Implicit binding - Applies to objects with methods. When the function (method) is invoked, look the the left of the dot, that's what 'this' refers to.
+// Explicit binding - we tell a function what the 'this' keyword should be using .call, .apply or .bind. Call will immediately invoke the function and you pass in your arguments 1 by 1. Apply will immediately invoke the function and you pass in your arguments as an array. Bind you pass in your arguments 1 by 1, but it will not immediately invoke the function, instead it returns a brand new function that can be invoked later.
+// New binding - When a function is invoked with a new keyword the this keyword inside that function is bound to the new object being constructed. When a function is invoked as a constructor function using the new keyword, this points to the new object that’s created
 
 ///////// END OF CHALLENGE /////////
 
